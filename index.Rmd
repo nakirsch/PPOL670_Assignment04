@@ -26,5 +26,14 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 ```{r}
 library(tidyverse)
 library(ggplot2)
+library(readxl)
+```
+
+
+```{r}
+data <- read_xlsx("Built Environment Health Equity Data Table.xlsx", sheet = "City data", range = "A2:AU72") %>%
+  janitor::clean_names()
+
+glimpse(data)
 ```
 
