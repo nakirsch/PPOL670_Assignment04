@@ -21,19 +21,40 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 ```
 
 ### PPOL 670 | Assignment 4
-### Data Visualization, Markdown, and Git
+### Data Visualization, Markdown, and Git]
+
+[72 Small and Medium-Size Cities Built Environment and Health Equity Dataset](https://datacatalog.urban.org/dataset/72-small-and-medium-size-cities-built-environment-and-health-equity-dataset)
+
+This Urban Institute data set includes summary demographics, economic and 
+housing demographics, andhealth indicators for 72 small and medium-size cities
+across the country. The research team interviewedstakeholders from 19 of the 
+cities included in the data set. The remaining 53 cities were selected as “peer”
+cities that shared one for more of the following characteristics with many of 
+the 19 cities: similar city type (suburban, central city, etc.), range of 
+population (small or medium-sized), and location within the samemetropolitan
+region or the same state/part of the country
 
 ```{r}
 library(tidyverse)
 library(ggplot2)
 library(readxl)
+getwd()
 ```
 
 
 ```{r}
-data <- read_xlsx("Built Environment Health Equity Data Table.xlsx", sheet = "City data", range = "A2:AU72") %>%
+data <- read_xlsx(path = "data/Built Environment Health Equity Data Table.xlsx", sheet = "City data", range = "A2:AU72") %>%
   janitor::clean_names()
 
 glimpse(data)
 ```
+
+```{r}
+
+
+
+
+```
+
+
 
