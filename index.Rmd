@@ -29,7 +29,6 @@ library(ggplot2)
 library(readxl)
 ```
 
-
 ```{r}
 data <- read_xlsx(path = "data/Built Environment Health Equity Data Table.xlsx", sheet = "City data", range = "A2:AU72") %>%
   janitor::clean_names()
@@ -37,3 +36,8 @@ data <- read_xlsx(path = "data/Built Environment Health Equity Data Table.xlsx",
 glimpse(data)
 ```
 
+
+
+```{r}
+
+```
