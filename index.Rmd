@@ -31,8 +31,8 @@ across the country. The research team interviewedstakeholders from 19 of the
 cities included in the data set. The remaining 53 cities were selected as “peer”
 cities that shared one for more of the following characteristics with many of 
 the 19 cities: similar city type (suburban, central city, etc.), range of 
-population (small or medium-sized), and location within the samemetropolitan
-region or the same state/part of the country
+population (small or medium-sized), and location within the same metropolitan
+region or the same state/part of the country.
 
 ```{r}
 library(tidyverse)
