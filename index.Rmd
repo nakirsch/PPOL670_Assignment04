@@ -81,7 +81,7 @@ data %>%
   geom_point(alpha = 0.8) + 
   geom_text(aes(label=ifelse(opioid_overdose_deaths>115,as.character(city),'')), hjust=-0.05, vjust=0) +
   labs (
-    title = "Higher Unemployment Relates to Higher Opioid Overdose Deaths",
+    title = "Relationship Between Unemployment Rate and Opioid Overdose Deaths",
     subtitle = "By Region",
     x = "Total Unemployment (%)",
     y = "Number of Opioid Overdose Deaths per 100,000 (2017)",
