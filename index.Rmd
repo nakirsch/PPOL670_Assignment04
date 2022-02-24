@@ -23,10 +23,12 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 ### PPOL 670 | Assignment 4
 ### Data Visualization, Markdown, and Git
 
+The four data visualizations in this document were created using the following source:
+
 [72 Small and Medium-Size Cities Built Environment and Health Equity Dataset](https://datacatalog.urban.org/dataset/72-small-and-medium-size-cities-built-environment-and-health-equity-dataset)
 
 This Urban Institute data set includes summary demographics, economic and 
-housing demographics, andhealth indicators for 72 small and medium-size cities
+housing demographics, and health indicators for 72 small and medium-size cities
 across the country. The research team interviewed stakeholders from 19 of the 
 cities included in the data set. The remaining 53 cities were selected as “peer”
 cities that shared one for more of the following characteristics with many of 
@@ -43,18 +45,49 @@ library(readxl)
 ```{r}
 data <- read_xlsx(path = "data/Built Environment Health Equity Data Table.xlsx", sheet = "City data", range = "A2:AU72") %>%
   janitor::clean_names()
-
-glimpse(data)
 ```
 
+\newpage
 
 ```{r}
-
+#Percent Change in Population From 2013 to 2018 By Region
+data %>%
+  mutate(percent_pop_change = ((population_2018 - population_2013)/population_2013)) %>%
+  group_by(region) %>%
+  summarize(mean_pop_change = mean(percent_pop_change)) %>%
+  ggplot(mapping = aes(x = region, y = mean_pop_change, fill = region, ymin = 0)) +
+  geom_col() +
+  labs (
+    title = "Percent Change in Population From 2013 to 2018",
+    subtitle = "By Region",
+    x = "Region",
+    y = "Percent Change in Population",
+    caption = "Urban Institute. 2020. 72 Small and Medium-Size Cities Built Environment and Health Equity Dataset.",
+  ) + 
+  scale_fill_discrete(name="Region") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_minimal()
 ```
 
 ```{r}
-
-
-
-
+#Relationship Between Unemployment and Opioid Overdose Deaths
+data %>%
+  filter(!opioid_overdose_deaths == "NA") %>%
+  mutate(opioid_overdose_deaths = as.numeric(opioid_overdose_deaths),
+         unemployment = total_unemployment_percent/100) %>%
+  group_by(region) %>%
+  ggplot(mapping = aes(x = unemployment, y = opioid_overdose_deaths, xmin = 0, ymin = 0, color = region)) +
+  geom_smooth(method = "lm", se = FALSE, alpha = 0.3) +
+  geom_point(alpha = 0.8) + 
+  geom_text(aes(label=ifelse(opioid_overdose_deaths>115,as.character(city),'')), hjust=-0.05, vjust=0) +
+  labs (
+    title = "Higher Unemployment Relates to Higher Opioid Overdose Deaths",
+    subtitle = "By Region",
+    x = "Total Unemployment (%)",
+    y = "Number of Opioid Overdose Deaths per 100,000 (2017)",
+    caption = "Urban Institute. 2020. 72 Small and Medium-Size Cities Built Environment and Health Equity Dataset.",
+    color = "Region"
+  ) + 
+  scale_x_continuous(labels = scales::percent) +
+  theme_minimal()
 ```
