@@ -23,7 +23,10 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 ### PPOL 670 | Assignment 4
 ### Data Visualization, Markdown, and Git
 
-The four data visualizations in this document were created using the following source:
+This assignment is stored on the following [Github repository](https://github.com/nakirsch/PPOL670_Assignment04/). 
+
+The four data visualizations in this document were created using the following 
+source:
 
 [72 Small and Medium-Size Cities Built Environment and Health Equity Dataset](https://datacatalog.urban.org/dataset/72-small-and-medium-size-cities-built-environment-and-health-equity-dataset)
 
@@ -37,10 +40,10 @@ population (small or medium-sized), and location within the same metropolitan
 region or the same state/part of the country. All collected data are for the
 most recent year available as of May 22, 2020.
 
-Within this data, we are investigating unemployment rates in 72 small and 
-medium-size cities across the country, specifically by region.From this data,
-we can see that unemployment rates vary across different regions and more 
-importantly, how a population trends  
+We used the Urban Institute's data set to analyze population trends, 
+unemployment rates, and opioid overdose deaths across U.S. regions. All of these
+factors are important for crafting policies that address economic and social
+inequities across the United States. 
 
 ```{r}
 library(tidyverse)
@@ -53,9 +56,46 @@ library(ggthemes)
 data <- read_xlsx(path = "data/Built Environment Health Equity Data Table.xlsx", sheet = "City data", range = "A2:AU72") %>%
   janitor::clean_names()
 ```
-/newpage
+\newpage
 
-Data Visualization #1
+1. Data Visualization #1: Percent Change in Population From 2013 to 2018 By 
+Region
+
+Overall, we found that population increased across all regions from 2013 to 
+2018. However, we can see that both the South and West regions experienced the 
+largest percentage increases in population, while the Midwest and Northeast 
+experienced much smaller population gains. This provides insight into 
+potential economic growth within these regions and the possible need to 
+reallocate more resources to accommodate this population growth. Additionally, it is possible that areas experiencing smaller population growth increases could posess economic factors that make them less desirable for people to live there.
+
+```{r}
+data %>%
+  mutate(percent_pop_change = ((population_2018 - population_2013)/population_2013)) %>%
+  group_by(region) %>%
+  summarize(mean_pop_change = mean(percent_pop_change)) %>%
+  ggplot(mapping = aes(x = region, y = mean_pop_change, fill = region, ymin = 0)) +
+  geom_col() +
+  labs (
+    title = "Percent Change in Population From 2013 to 2018",
+    subtitle = "By Region",
+    x = "Region",
+    y = "Percent Change in Population",
+    caption = "Urban Institute. 2020. 72 Small and Medium-Size Cities Built Environment and Health Equity Dataset.",
+  ) + 
+  scale_fill_discrete(name="Region") +
+  scale_y_continuous(labels = scales::percent) +
+  theme_minimal()
+
+```
+\newpage
+
+2. Data Visualization #2: The Total Unemployment Rate by Region
+
+Overall, average unemployment hovers between 5 to 10% for each region. 
+We can see that the city with the highest unemployment rate (approximately 15%) is located in the Midwest region. This region also has a large variance in unemployment rates, whereas the Western region has a maximum unemployment rate of 9% and a smaller variance. These 
+discrepancies indicate that economic disparities are not consistent across all 
+regions, and may indicate that we need more targeted programming in certain 
+regions to close these unemployment gaps.
 
 ```{r}
 data %>%
@@ -75,8 +115,16 @@ data %>%
   theme_minimal()
 
 ```
+\newpage
 
-Data Visualization #2
+3. Data Visualization #3: The Relationship between Population Trends and Total
+Unemployment By Region
+
+Overall, unemployment seems to be higher in regions and cities where population 
+is stagnated or decreasing. We can also see that the highest rates of 
+unemployment are located in the Midwest. This visualization complements 
+the previous two graphs as it provides us more details on how population
+trends vary with unemployment rates. This visualization also indicates that policy makers would likely need to focus unemployment reduction efforts in areas that are decreasing in population.
 
 ```{r}
 data %>%
@@ -88,7 +136,8 @@ data %>%
        labs(
        x = "Population Trend",
        y = "Total Unemployment (%)",
-       title = "Population Trend v. Total Unemployment (%)",
+       title = "The Relationship between Population Trends and Total
+Unemployment (%)",
        subtitle = "By Region",
        caption = "Urban Institute. 2020. 72 Small and Medium-Size Cities Built Environment and Health Equity Dataset.",
        color = "Population Trend"
@@ -96,31 +145,16 @@ data %>%
   theme_minimal()
 
 ```
-
 \newpage
 
-```{r}
-#Percent Change in Population From 2013 to 2018 By Region
-data %>%
-  mutate(percent_pop_change = ((population_2018 - population_2013)/population_2013)) %>%
-  group_by(region) %>%
-  summarize(mean_pop_change = mean(percent_pop_change)) %>%
-  ggplot(mapping = aes(x = region, y = mean_pop_change, fill = region, ymin = 0)) +
-  geom_col() +
-  labs (
-    title = "Percent Change in Population From 2013 to 2018",
-    subtitle = "By Region",
-    x = "Region",
-    y = "Percent Change in Population",
-    caption = "Urban Institute. 2020. 72 Small and Medium-Size Cities Built Environment and Health Equity Dataset.",
-  ) + 
-  scale_fill_discrete(name="Region") +
-  scale_y_continuous(labels = scales::percent) +
-  theme_minimal()
-```
+4. Data Visualization #4: Relationship Between Unemployment and Opioid Overdose 
+Deaths By Region
+
+When comparing average unemployment rates from 2014 to 2018 to the number of opioid 
+overdose deaths per 100,000 in 2017, it appears that there is no significant 
+relationship between these variables except for in the Midwest. It is worth noting, however, that the strong relationship observed in the Midwest may be heavily driven by Dayton, Ohio, the outlier city labeled in the figure below. As opioid deaths have become a national concern over the past few years, this data can provide surface-level insights as to where opioid reduction programs and rehabiliation services may need to be targeted.
 
 ```{r}
-#Relationship Between Unemployment and Opioid Overdose Deaths
 data %>%
   filter(!opioid_overdose_deaths == "NA") %>%
   mutate(opioid_overdose_deaths = as.numeric(opioid_overdose_deaths),
@@ -141,3 +175,7 @@ data %>%
   scale_x_continuous(labels = scales::percent) +
   theme_minimal()
 ```
+
+
+
+
