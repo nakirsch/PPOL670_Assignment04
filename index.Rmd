@@ -26,19 +26,25 @@ knitr::knit_hooks$set(chunk = function(x, options) {
 [72 Small and Medium-Size Cities Built Environment and Health Equity Dataset](https://datacatalog.urban.org/dataset/72-small-and-medium-size-cities-built-environment-and-health-equity-dataset)
 
 This Urban Institute data set includes summary demographics, economic and 
-housing demographics, andhealth indicators for 72 small and medium-size cities
-across the country. The research team interviewedstakeholders from 19 of the 
+housing demographics, and health indicators for 72 small and medium-size cities
+across the country. The research team interviewed stakeholders from 19 of the 
 cities included in the data set. The remaining 53 cities were selected as “peer”
 cities that shared one for more of the following characteristics with many of 
 the 19 cities: similar city type (suburban, central city, etc.), range of 
 population (small or medium-sized), and location within the same metropolitan
-region or the same state/part of the country.
+region or the same state/part of the country. All collected data are for the
+most recent year available as of May 22, 2020.
+
+Within this data, we are investigating unemployment rates in 72 small and 
+medium-size cities across the country, specifically by region.From this data,
+we can see that unemployment rates vary across different regions and more 
+importantly, how a population trends  
 
 ```{r}
 library(tidyverse)
 library(ggplot2)
 library(readxl)
-getwd()
+library(ggthemes)
 ```
 
 
@@ -48,13 +54,55 @@ data <- read_xlsx(path = "data/Built Environment Health Equity Data Table.xlsx",
 
 glimpse(data)
 ```
+/newpage
+
+Data Visualization #1
+
+```{r}
+data %>%
+  mutate(unemployment = total_unemployment_percent/100) %>%
+  ggplot(aes(region, unemployment , color = region, stroke = 5, ymin = 0)) + 
+    geom_boxplot(outlier.colour="black", outlier.shape=16,outlier.size=2, notch=FALSE) +
+    stat_summary(fun.y=mean, geom="point", shape=16) + 
+     scale_y_continuous(labels = scales::percent) + 
+     labs(
+       x = "Region",
+       y = "Total Unemployment (%)",
+       title = "Total Unemployment",
+       subtitle = "By Region",
+       caption = "Urban Institute. 2020. 72 Small and Medium-Size Cities Built Environment and Health Equity Dataset.",
+       color = "Region"
+     ) +
+  theme_minimal()
+
+```
+
+Data Visualization #2
+
+```{r}
+data %>%
+  mutate(unemployment = total_unemployment_percent/100) %>%
+  ggplot(aes(population_trend, unemployment, color = population_trend, ymin = 0)) +  
+  geom_point(alpha = 0.6, size = 2.5) +
+  facet_wrap(~region) + 
+  scale_y_continuous(labels = scales::percent) +
+       labs(
+       x = "Population Trend",
+       y = "Total Unemployment (%)",
+       title = "Population Trend v. Total Unemployment (%)",
+       subtitle = "By Region",
+       caption = "Urban Institute. 2020. 72 Small and Medium-Size Cities Built Environment and Health Equity Dataset.",
+       color = "Population Trend"
+       ) + 
+  theme_minimal()
+  
+```
+
 
 ```{r}
 
 
 
-
-```
 
 
 
