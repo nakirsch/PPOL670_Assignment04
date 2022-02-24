@@ -31,7 +31,7 @@ library(readxl)
 
 
 ```{r}
-data <- read_xlsx("Built Environment Health Equity Data Table.xlsx", sheet = "City data", range = "A2:AU72") %>%
+data <- read_xlsx(path = "data/Built Environment Health Equity Data Table.xlsx", sheet = "City data", range = "A2:AU72") %>%
   janitor::clean_names()
 
 glimpse(data)
