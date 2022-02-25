@@ -175,6 +175,11 @@ data %>%
   scale_x_continuous(labels = scales::percent) +
   theme_minimal()
 ```
+\newpage
+
+Stretch Exercise 01
+
+![Screenshot of git remote -v](stretch_exercise_01.png)
 
 
 
